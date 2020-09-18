@@ -5,40 +5,40 @@ import (
 	"strings"
 )
 
-type Base62Convertor struct {
+type Convertor struct {
 }
 
-func (r Base62Convertor) GetBaseNumber() int {
+func (c Convertor) GetBaseNumber() int {
 	return 62
 }
 
-func (r Base62Convertor) Encode(number int) (string, error) {
-	encodedString := ""
+func (c Convertor) Encode(num int) (string, error) {
+	str := ""
 	for true {
-		remainder := number % r.GetBaseNumber()
-		number = number / r.GetBaseNumber()
-		symbol, err := r.getSymbolOfNumber(remainder)
+		r := num % c.GetBaseNumber()
+		num = num / c.GetBaseNumber()
+		symbol, err := c.getSymbolOfNumber(r)
 		if err != nil {
 			return "", err
 		}
-		encodedString = string(symbol) + encodedString
-		if number == 0 {
+		str = string(symbol) + str
+		if num == 0 {
 			break
 		}
 	}
-	return encodedString, nil
+	return str, nil
 }
-func (r Base62Convertor) Decode(str string) (int, error) {
+func (c Convertor) Decode(str string) (int, error) {
 	decodedValue := 0
 	str = strings.TrimLeft(str, "0")
 	strLen := len(str)
-	for i, character := range str {
-		symbolValue, err := r.getSymbolValue(character)
+	for i, char := range str {
+		symbolValue, err := c.getSymbolValue(char)
 		if err != nil {
 			return -1, err
 		}
-		positionPower := strLen - (i + 1)
-		decodedValue += symbolValue * int(math.Pow(float64(r.GetBaseNumber()), float64(positionPower)))
+		pow := strLen - (i + 1)
+		decodedValue += symbolValue * int(math.Pow(float64(c.GetBaseNumber()), float64(pow)))
 	}
 	return decodedValue, nil
 }
@@ -50,29 +50,29 @@ const (
 	SmallLettersOffset        = int('a'-'9') - NumberOfAlphabets - 1
 )
 
-func (r Base62Convertor) getSymbolValue(character rune) (int, error) {
-	var offsetFromZero = int(character - ZeroAsciCode)
+func (c Convertor) getSymbolValue(char rune) (int, error) {
+	var offset = int(char - ZeroAsciCode)
 	switch {
-	case character >= '0' && character <= '9':
-		return offsetFromZero, nil
-	case character >= 'A' && character <= 'Z':
-		return offsetFromZero - CapitalLettersOffset, nil
-	case character >= 'a' && character <= 'z':
-		return offsetFromZero - SmallLettersOffset, nil
+	case char >= '0' && char <= '9':
+		return offset, nil
+	case char >= 'A' && char <= 'Z':
+		return offset - CapitalLettersOffset, nil
+	case char >= 'a' && char <= 'z':
+		return offset - SmallLettersOffset, nil
 	default:
 		return -1, &UnexpectedCharacterError{}
 	}
 }
 
-func (r Base62Convertor) getSymbolOfNumber(number int) (rune, error) {
-	var offsetFromZero = rune(number) + ZeroAsciCode
+func (c Convertor) getSymbolOfNumber(num int) (rune, error) {
+	var offset = rune(num) + ZeroAsciCode
 	switch {
-	case number >= 0 && number <= 9:
-		return offsetFromZero, nil
-	case number > 9 && number <= 9+NumberOfAlphabets:
-		return offsetFromZero + rune(CapitalLettersOffset), nil
-	case number > NumberOfAlphabets && number <= (9+2*NumberOfAlphabets):
-		return offsetFromZero + rune(SmallLettersOffset), nil
+	case num >= 0 && num <= 9:
+		return offset, nil
+	case num > 9 && num <= 9+NumberOfAlphabets:
+		return offset + rune(CapitalLettersOffset), nil
+	case num > NumberOfAlphabets && num <= (9+2*NumberOfAlphabets):
+		return offset + rune(SmallLettersOffset), nil
 	default:
 		return -1, &UnexpectedNumberError{}
 	}

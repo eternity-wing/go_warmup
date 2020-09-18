@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	base62Convertor := base62.Base62Convertor{}
-	shortLinkConvertor := shortlinkconversion.InitLinkConvertor(base62Convertor)
+	base62Convertor := base62.Convertor{}
+	shortLinkConvertor := shortlinkconversion.InitConvertor(base62Convertor)
 	fmt.Println(shortLinkConvertor.Decode("zzz"))
 }

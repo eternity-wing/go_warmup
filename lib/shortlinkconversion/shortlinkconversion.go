@@ -9,7 +9,7 @@ type shortLinkConvertor struct {
 	convertor linkConverter
 }
 
-func InitLinkConvertor(c linkConverter) *shortLinkConvertor {
+func InitConvertor(c linkConverter) *shortLinkConvertor {
 	return &shortLinkConvertor{
 		convertor: c,
 	}

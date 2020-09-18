@@ -33,74 +33,74 @@ var validStringCases = []stringTestCase{
 	{str: "00Z", value: 35, err: nil},
 }
 
-func TestBase62Convertor_Decode(t *testing.T) {
-	convertor := Base62Convertor{}
+func TestConvertor_Decode(t *testing.T) {
+	convertor := Convertor{}
 
-	stringCases := []stringTestCase{
+	testCases := []stringTestCase{
 		{str: "00-", value: -1, err: &UnexpectedCharacterError{}},
 	}
 
-	copy(stringCases, validStringCases)
+	copy(testCases, validStringCases)
 
-	for _, stringTestCase := range stringCases {
-		val, err := convertor.Decode(stringTestCase.str)
+	for _, testCase := range testCases {
+		val, err := convertor.Decode(testCase.str)
 
-		if stringTestCase.err == nil && val != stringTestCase.value {
-			t.Errorf("Expect return %d for %s, but return %d", stringTestCase.value, stringTestCase.str, val)
-		} else if reflect.TypeOf(err) != reflect.TypeOf(stringTestCase.err) {
-			t.Errorf("Expected error of type %T but %T", stringTestCase.err, err)
+		if testCase.err == nil && val != testCase.value {
+			t.Errorf("Expect return %d for %s, but return %d", testCase.value, testCase.str, val)
+		} else if reflect.TypeOf(err) != reflect.TypeOf(testCase.err) {
+			t.Errorf("Expected error of type %T but %T", testCase.err, err)
 		}
 
 	}
 
 }
 
-func TestBase62Convertor_Encode(t *testing.T) {
-	convertor := Base62Convertor{}
+func TestConvertor_Encode(t *testing.T) {
+	convertor := Convertor{}
 
-	for _, stringTestCase := range validStringCases {
-		val, err := convertor.Encode(stringTestCase.value)
-		expectedStr := strings.TrimLeft(stringTestCase.str, "0")
-		if stringTestCase.err == nil && val != expectedStr {
-			t.Errorf("Expect return %s for %d, but return %s", expectedStr, stringTestCase.value, val)
-		} else if reflect.TypeOf(err) != reflect.TypeOf(stringTestCase.err) {
-			t.Errorf("Expected error of type %T but %T", stringTestCase.err, err)
+	for _, testCase := range validStringCases {
+		val, err := convertor.Encode(testCase.value)
+		expectedStr := strings.TrimLeft(testCase.str, "0")
+		if testCase.err == nil && val != expectedStr {
+			t.Errorf("Expect return %s for %d, but return %s", expectedStr, testCase.value, val)
+		} else if reflect.TypeOf(err) != reflect.TypeOf(testCase.err) {
+			t.Errorf("Expected error of type %T but %T", testCase.err, err)
 		}
 
 	}
 
 }
 
-func TestBase62Convertor_getSymbolValue(t *testing.T) {
-	convertor := Base62Convertor{}
-	symbols := []symbolTestCase{
+func TestConvertor_getSymbolValue(t *testing.T) {
+	convertor := Convertor{}
+	testCases := []symbolTestCase{
 		{character: '*', value: -1, err: &UnexpectedCharacterError{}},
 	}
-	copy(symbols, validSymbols)
-	for _, symbolTestCase := range symbols {
-		val, err := convertor.getSymbolValue(symbolTestCase.character)
+	copy(testCases, validSymbols)
+	for _, testCase := range testCases {
+		val, err := convertor.getSymbolValue(testCase.character)
 
-		if symbolTestCase.err != nil && val != symbolTestCase.value {
-			t.Errorf("Expect return %d for %c, but return %d", symbolTestCase.value, symbolTestCase.character, val)
-		} else if reflect.TypeOf(err) != reflect.TypeOf(symbolTestCase.err) {
-			t.Errorf("Expected error of type %T but %T", symbolTestCase.err, err)
+		if testCase.err != nil && val != testCase.value {
+			t.Errorf("Expect return %d for %c, but return %d", testCase.value, testCase.character, val)
+		} else if reflect.TypeOf(err) != reflect.TypeOf(testCase.err) {
+			t.Errorf("Expected error of type %T but %T", testCase.err, err)
 		}
 	}
 
 }
 
-func TestBase62Convertor_getSymbolOfNumber(t *testing.T) {
-	convertor := Base62Convertor{}
-	symbols := []symbolTestCase{
+func TestConvertor_getSymbolOfNumber(t *testing.T) {
+	convertor := Convertor{}
+	testCases := []symbolTestCase{
 		{character: '*', value: -1, err: &UnexpectedNumberError{}},
 	}
-	for _, symbolTestCase := range symbols {
-		char, err := convertor.getSymbolOfNumber(symbolTestCase.value)
+	for _, testCase := range testCases {
+		char, err := convertor.getSymbolOfNumber(testCase.value)
 
-		if symbolTestCase.err == nil && char != symbolTestCase.character {
-			t.Errorf("Expect return %c for %d, but return %c", symbolTestCase.character, symbolTestCase.value, char)
-		} else if reflect.TypeOf(err) != reflect.TypeOf(symbolTestCase.err) {
-			t.Errorf("Expected error of type %T but %T", symbolTestCase.err, err)
+		if testCase.err == nil && char != testCase.character {
+			t.Errorf("Expect return %c for %d, but return %c", testCase.character, testCase.value, char)
+		} else if reflect.TypeOf(err) != reflect.TypeOf(testCase.err) {
+			t.Errorf("Expected error of type %T but %T", testCase.err, err)
 		}
 	}
 
